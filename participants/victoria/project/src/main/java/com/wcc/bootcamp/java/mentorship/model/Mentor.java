@@ -1,5 +1,6 @@
 package com.wcc.bootcamp.java.mentorship.model;
 
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,21 +10,36 @@ import java.util.UUID;
  * Represents a mentor with expertise areas.
  * Mentors can be matched with mentees based on their skills.
  */
+@Entity
+@Table(name = "mentors")
 public class Mentor {
-    private final String id;
+    @Id
+    private String id;
+    
     private String name;
     private String email;
+    
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "mentor_expertise", joinColumns = @JoinColumn(name = "mentor_id"))
+    @Column(name = "expertise")
     private List<String> expertiseAreas;
+    
     private int maxMentees;
     private int currentMenteeCount;
 
-    public Mentor(String name, String email, List<String> expertiseAreas) {
+    // Default constructor required by JPA
+    public Mentor() {
         this.id = UUID.randomUUID().toString();
+        this.expertiseAreas = new ArrayList<>();
+        this.maxMentees = 3;
+        this.currentMenteeCount = 0;
+    }
+
+    public Mentor(String name, String email, List<String> expertiseAreas) {
+        this();
         this.name = name;
         this.email = email;
         this.expertiseAreas = new ArrayList<>(expertiseAreas);
-        this.maxMentees = 3; // Default max mentees
-        this.currentMenteeCount = 0;
     }
 
     public Mentor(String name, String email, List<String> expertiseAreas, int maxMentees) {

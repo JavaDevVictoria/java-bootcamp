@@ -10,7 +10,7 @@ version = "0.0.1-SNAPSHOT"
 description = "Java Bootcamp "
 
 application {
-	mainClass.set("com.wcc.bootcamp.java.mentorship.MentorshipMatcherApp")
+	mainClass.set("com.wcc.bootcamp.java.mentorship.MentorshipWebApplication")
 }
 
 java {
@@ -22,6 +22,9 @@ java {
 			java {
 				srcDirs("src/main/java", "participants/victoria/project/src/main/java")
 			}
+			resources {
+				srcDirs("src/main/resources", "participants/victoria/project/src/main/resources")
+			}
 		}
 	}
 }
@@ -32,10 +35,19 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.withType<Copy> {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

@@ -1,5 +1,6 @@
 package com.wcc.bootcamp.java.mentorship.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +11,29 @@ import java.util.UUID;
  * Represents a match between a mentor and a mentee.
  * Contains matching score and matched skills information.
  */
+@Entity
+@Table(name = "matches")
 public class Match {
-    private final String id;
-    private final Mentor mentor;
-    private final Mentee mentee;
-    private final List<String> matchedSkills;
-    private final double matchScore;
-    private final LocalDateTime matchDate;
+    @Id
+    private String id;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mentor_id")
+    private Mentor mentor;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mentee_id")
+    private Mentee mentee;
+    
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "match_skills", joinColumns = @JoinColumn(name = "match_id"))
+    @Column(name = "skill")
+    private List<String> matchedSkills;
+    
+    private double matchScore;
+    private LocalDateTime matchDate;
+    
+    @Enumerated(EnumType.STRING)
     private MatchStatus status;
 
     public enum MatchStatus {
@@ -26,14 +43,20 @@ public class Match {
         CANCELLED
     }
 
-    public Match(Mentor mentor, Mentee mentee, List<String> matchedSkills, double matchScore) {
+    // Default constructor required by JPA
+    public Match() {
         this.id = UUID.randomUUID().toString();
+        this.matchedSkills = new ArrayList<>();
+        this.matchDate = LocalDateTime.now();
+        this.status = MatchStatus.PENDING;
+    }
+
+    public Match(Mentor mentor, Mentee mentee, List<String> matchedSkills, double matchScore) {
+        this();
         this.mentor = mentor;
         this.mentee = mentee;
         this.matchedSkills = new ArrayList<>(matchedSkills);
         this.matchScore = matchScore;
-        this.matchDate = LocalDateTime.now();
-        this.status = MatchStatus.PENDING;
     }
 
     // Getters

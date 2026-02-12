@@ -1,5 +1,6 @@
 package com.wcc.bootcamp.java.mentorship.model;
 
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,21 +10,36 @@ import java.util.UUID;
  * Represents a mentee with learning goals.
  * Mentees can be matched with mentors based on their desired skills.
  */
+@Entity
+@Table(name = "mentees")
 public class Mentee {
-    private final String id;
+    @Id
+    private String id;
+    
     private String name;
     private String email;
+    
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "mentee_goals", joinColumns = @JoinColumn(name = "mentee_id"))
+    @Column(name = "goal")
     private List<String> learningGoals;
+    
     private String experienceLevel;
     private boolean isMatched;
 
-    public Mentee(String name, String email, List<String> learningGoals) {
+    // Default constructor required by JPA
+    public Mentee() {
         this.id = UUID.randomUUID().toString();
+        this.learningGoals = new ArrayList<>();
+        this.experienceLevel = "beginner";
+        this.isMatched = false;
+    }
+
+    public Mentee(String name, String email, List<String> learningGoals) {
+        this();
         this.name = name;
         this.email = email;
         this.learningGoals = new ArrayList<>(learningGoals);
-        this.experienceLevel = "beginner"; // Default experience level
-        this.isMatched = false;
     }
 
     public Mentee(String name, String email, List<String> learningGoals, String experienceLevel) {
