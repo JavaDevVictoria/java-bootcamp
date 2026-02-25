@@ -5,6 +5,9 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
+// Use build directory outside OneDrive to avoid file locking issues
+layout.buildDirectory = file("C:/Temp/gradle-build/java-bootcamp")
+
 group = "com.wcc.bootcamp.java"
 version = "0.0.1-SNAPSHOT"
 description = "Java Bootcamp "
@@ -26,6 +29,14 @@ java {
 				srcDirs("src/main/resources", "participants/victoria/project/src/main/resources")
 			}
 		}
+		test {
+			java {
+				srcDirs("src/test/java", "participants/victoria/project/src/test/java")
+			}
+			resources {
+				srcDirs("src/test/resources", "participants/victoria/project/src/test/resources")
+			}
+		}
 	}
 }
 
@@ -41,6 +52,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-webflux")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

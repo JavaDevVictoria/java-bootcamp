@@ -46,6 +46,43 @@ export JAVA_HOME=/path/to/jdk-23
 
 The application will start at **http://localhost:8080**
 
+## Running Tests
+
+```powershell
+# Set JAVA_HOME (Windows PowerShell)
+$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-23.0.2.7-hotspot"
+
+# Run all tests
+.\gradlew.bat test --no-daemon
+```
+
+Test results are generated at `C:\Temp\gradle-build\java-bootcamp\reports\tests\test\index.html`
+
+### Test Coverage
+
+| Test Class | Tests | Description |
+|------------|-------|-------------|
+| `MentorTest` | 16 | Model tests: constructor, equality, expertise matching, mentee capacity |
+| `MenteeTest` | 15 | Model tests: constructor, equality, learning goals, match status |
+| `MatchTest` | 17 | Model tests: constructor, equality, lifecycle (activate/cancel/complete), file format |
+| `MentorshipServiceTest` | 18 | Service tests: mentor/mentee/match CRUD operations, statistics |
+| `DtoValidationTest` | 22 | Validation tests: registration form input validation |
+| **Total** | **88** | |
+
+### Test Structure
+
+```
+participants/victoria/project/src/test/java/com/wcc/bootcamp/java/mentorship/
+├── model/
+│   ├── MentorTest.java              # Mentor entity tests
+│   ├── MenteeTest.java              # Mentee entity tests
+│   └── MatchTest.java               # Match entity tests
+├── service/
+│   └── MentorshipServiceTest.java   # Business logic tests (with Mockito)
+└── dto/
+    └── DtoValidationTest.java       # Form validation tests
+```
+
 ## Application Pages
 
 | URL | Description |
