@@ -23,4 +23,8 @@ public interface MatchRepository extends JpaRepository<Match, String> {
     List<Match> findByMentorAndStatus(Mentor mentor, Match.MatchStatus status);
     
     List<Match> findByMenteeAndStatus(Mentee mentee, Match.MatchStatus status);
+    
+    void deleteByMentee(Mentee mentee);
+    
+    void deleteByMentor(Mentor mentor);
 }

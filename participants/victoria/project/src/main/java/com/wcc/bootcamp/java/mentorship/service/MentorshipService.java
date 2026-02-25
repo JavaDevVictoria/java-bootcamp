@@ -60,7 +60,11 @@ public class MentorshipService {
     }
 
     public void deleteMentor(String id) {
-        mentorRepository.deleteById(id);
+        mentorRepository.findById(id).ifPresent(mentor -> {
+            // Delete all matches involving this mentor first
+            matchRepository.deleteByMentor(mentor);
+            mentorRepository.delete(mentor);
+        });
     }
 
     // ==================== Mentee Operations ====================
@@ -92,7 +96,11 @@ public class MentorshipService {
     }
 
     public void deleteMentee(String id) {
-        menteeRepository.deleteById(id);
+        menteeRepository.findById(id).ifPresent(mentee -> {
+            // Delete all matches involving this mentee first
+            matchRepository.deleteByMentee(mentee);
+            menteeRepository.delete(mentee);
+        });
     }
 
     // ==================== Matching Operations ====================
